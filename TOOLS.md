@@ -1,40 +1,44 @@
 # TOOLS.md - Local Notes
 
-Skills define _how_ tools work. This file is for _your_ specifics — the stuff that's unique to your setup.
+## Accounts
+- **Sharky Google**: sharkybot41@gmail.com
+- **Vapi**: API key in .secrets/credentials.env, phone +1 (319) 719-9951
+- **GitHub**: sharkybot41 (gh CLI authenticated)
+- **Telegram Bot**: @sharkybot (token in openclaw.json)
+- **Discord Bot**: Sharky (token in openclaw.json)
+- **BlueBubbles**: iMessage via sharky2.share.zrok.io
 
-## What Goes Here
+## Communication Channels
+- **iMessage/BlueBubbles**: Primary, to Darius (+18318898775)
+- **Telegram**: Bot active, open group policy
+- **Discord**: Bot active, open group policy
+- **Voice/Phone**: Vapi +1 (319) 719-9951
 
-Things like:
+## Installed CLI Tools
+- **gogcli** - Google Workspace (Gmail, Calendar, Drive, etc.)
+- **memo** - Apple Notes
+- **remindctl** - Apple Reminders
+- **obsidian-cli** - Obsidian vaults
+- **railway** - Railway deployment
+- **gemini-cli** - Gemini AI
+- **camsnap** - Camera capture
+- **peekaboo** - macOS UI automation
+- **openai-whisper** - Local speech-to-text
+- **summarize** - URL/content summarization
+- **xurl** - X (Twitter) API
+- **codexbar** - Cost/usage tracking
+- **gifgrep** - GIF search
+- **tmux** - Terminal multiplexer
+- **ffmpeg** - Audio/video processing
 
-- Camera names and locations
-- SSH hosts and aliases
-- Preferred voices for TTS
-- Speaker/room names
-- Device nicknames
-- Anything environment-specific
+## Custom Tools (workspace/tools/)
+- **vapi.sh** - Vapi phone/call management
+- **sharkyctl.sh** - Sharky control center
 
-## Examples
-
-```markdown
-### Cameras
-
-- living-room → Main area, 180° wide angle
-- front-door → Entrance, motion-triggered
-
-### SSH
-
-- home-server → 192.168.1.100, user: admin
-
-### TTS
-
-- Preferred voice: "Nova" (warm, slightly British)
-- Default speaker: Kitchen HomePod
-```
-
-## Why Separate?
-
-Skills are shared. Your setup is yours. Keeping them apart means you can update skills without losing your notes, and share skills without leaking your infrastructure.
-
----
-
-Add whatever helps you do your job. This is your cheat sheet.
+## Infrastructure
+- **Mac mini (2024)**, Apple Silicon, 16GB RAM, 228GB SSD
+- **OpenClaw 2026.4.2** on Darwin 25.3.0
+- **Railway** account active
+- **Google Cloud** free trial active
+- **Firebase** BlueBubbles project (Blaze plan)
+- **Zrok** tunnel for BlueBubbles (sharky2.share.zrok.io)
