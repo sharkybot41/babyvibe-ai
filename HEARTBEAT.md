@@ -1,7 +1,8 @@
-# HEARTBEAT.md Template
+# HEARTBEAT.md - Sharky's Periodic Check
 
-```markdown
-# Keep this file empty (or with only comments) to skip heartbeat API calls.
-
-# Add tasks below when you want the agent to check something periodically.
-```
+## Every heartbeat:
+- [ ] Check Vapi for missed calls or voapi calls
+ messages
+- [ ] Review memory and update if needed
+- [ ] Check system health (disk, memory, processes)
+- [ ] Look for any cron tasks that need attention
