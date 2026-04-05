@@ -1,0 +1,12 @@
+{
+  "name": "vapi-webhook-server",
+  "version": "1.0.0",
+  "description": "Webhook server for receiving and logging Vapi call events",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
