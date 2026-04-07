@@ -135,7 +135,7 @@
     <div class="flex-1 flex items-center justify-center px-5 py-4">
 
 <!-- S1: Gender -->
-<div id="s1" class="step active flex-col items-center max-w-sm mx-auto w-full slide-in">
+<div id="s1" class="step flex-col items-center max-w-sm mx-auto w-full">
     <p class="text-purple-400 text-xs mb-1">About You · Step 1 of 22</p>
     <h2 class="text-xl font-extrabold mb-1 text-center">I identify as… 👤</h2>
     <p class="text-purple-400 text-xs mb-4 text-center">This helps us personalize your results</p>
@@ -729,7 +729,14 @@ function haptic(){if(navigator.vibrate)navigator.vibrate(10);}
 
 function go(from,to){
     document.getElementById(from).classList.add('hidden');
-    document.getElementById(to==='quiz'?'quiz':to).classList.remove('hidden');
+    // Show the quiz wrapper
+    document.getElementById('quiz').classList.remove('hidden');
+    // Hide any currently active step
+    document.querySelectorAll('.step.active').forEach(s=>s.classList.remove('active'));
+    // Show target step
+    const target=document.getElementById(to);
+    if(target){target.classList.add('active');target.classList.add('slide-in');}
+    step=1;
     updProg();
 }
 
