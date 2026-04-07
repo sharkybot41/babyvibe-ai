@@ -330,6 +330,7 @@
         <span class="text-xs text-purple-300">Tap to upload</span>
     </div>
     <input type="file" id="f1" accept="image/*" onchange="uphoto(this,'p1')">
+    <button onclick="skipPhoto()" class="mt-3 text-purple-400 text-xs underline">Skip photo →</button>
 </div>
 
 <!-- S15: Partner photo -->
@@ -342,6 +343,7 @@
         <span class="text-xs text-purple-300">Tap to upload</span>
     </div>
     <input type="file" id="f2" accept="image/*" onchange="uphoto(this,'p2')">
+    <button onclick="skipPhoto()" class="mt-3 text-purple-400 text-xs underline">Skip photo →</button>
 </div>
 
 <!-- S16: Hair preference -->
@@ -853,6 +855,8 @@ function confetti(){
         setTimeout(()=>c.remove(),5000);
     }
 }
+
+function skipPhoto(){haptic();next();}
 
 function shareResult(){
     const t="I just used BabyVibe AI to see what my future baby will look like! 🍼👶 Try it:";
