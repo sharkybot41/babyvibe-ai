@@ -1,8 +1,0 @@
-{
-  "name": "babyvibe-ai",
-  "version": "2.0.0",
-  "private": true,
-  "scripts": {
-    "start": "npx -y serve@latest -s . -l ${PORT:-8080}"
-  }
-}
