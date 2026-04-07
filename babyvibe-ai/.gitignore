@@ -1,0 +1,7 @@
+# BabyVibe AI v2 — Deploy notes
+
+# API key saved. Railway deploy: fresh project needed.
+ see below for## Railway troubleshooting
+
+```
+cd /Users/sharky/.openclaw/workspace/babyvibe-ai && cat .railway/* 2>/dev/null; rm -rf .railway.json .2>/dev/null || true

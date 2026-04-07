@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "skills": {
+    "github": {
+      "version": "1.0.0",
+      "installedAt": 1775546113863
+    },
+    "linear": {
+      "version": "1.0.0",
+      "installedAt": 1775546114163
+    },
+    "agentmail": {
+      "version": "1.1.1",
+      "installedAt": 1775546114503
+    },
+    "automation-workflows": {
+      "version": "0.1.0",
+      "installedAt": 1775546354923
+    },
+    "playwright-mcp": {
+      "version": "1.0.0",
+      "installedAt": 1775546354941
+    },
+    "obsidian-direct": {
+      "version": "1.0.0",
+      "installedAt": 1775546355929
+    },
+    "ui-ux-pro-max": {
+      "version": "0.1.0",
+      "installedAt": 1775548176630
+    }
+  }
+}

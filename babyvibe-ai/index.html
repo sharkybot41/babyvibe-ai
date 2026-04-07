@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BabyVibe AI — See Your Future Baby 🍼</title>
+    <meta name="description" content="AI generates what your future baby will look like. 2M+ babies generated. 60 second quiz.">
+    <meta property="og:title" content="BabyVibe AI — See Your Future Baby 🍼">
+    <meta property="og:description" content="AI generates what your future baby will look like. Upload your photos and see in 60 seconds.">
+    <meta property="og:image" content="/og-image.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 50:'#faf5ff',100:'#f3e8ff',200:'#e9d5ff',300:'#d8b4fe',400:'#c084fc',500:'#a855f7',600:'#9333ea',700:'#7e22ce',800:'#6b21a8',900:'#581c87',950:'#3b0764' },
+                        gold: { 400:'#fbbf24', 500:'#f59e0b' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        body { font-family:'Inter',sans-serif; overflow-x:hidden; -webkit-tap-highlight-color:transparent; }
+        .stars { background: radial-gradient(ellipse at top, #1e1040 0%, #0f0a1e 100%); }
+        .glow { box-shadow: 0 0 30px rgba(168,85,247,0.4); }
+        .glow-gold { box-shadow: 0 0 30px rgba(245,158,11,0.4); }
+        .glow-text { text-shadow: 0 0 20px rgba(168,85,247,0.5); }
+        
+        .step { display:none; } .step.active { display:flex; }
+        
+        .slide-in { animation: slideIn 0.35s ease-out; }
+        @keyframes slideIn { from{opacity:0;transform:translateX(40px)} to{opacity:1;transform:translateX(0)} }
+        
+        .slide-up { animation: slideUp 0.4s ease-out; }
+        @keyframes slideUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+        
+        .pulse-glow { animation: pulseGlow 2s ease-in-out infinite; }
+        @keyframes pulseGlow { 0%,100%{box-shadow:0 0 20px rgba(168,85,247,0.3)} 50%{box-shadow:0 0 40px rgba(168,85,247,0.6)} }
+        
+        .float { animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+        
+        .spin-wheel { transition: transform 4s cubic-bezier(0.17,0.67,0.12,0.99); }
+        
+        .progress-fill { transition: width 0.5s ease; }
+        
+        .validation-fade { animation: valFade 0.6s ease-out; }
+        @keyframes valFade { from{opacity:0;transform:scale(0.9)} to{opacity:1;transform:scale(1)} }
+        
+        .countdown-pulse { animation: cdPulse 1s ease-in-out infinite; }
+        @keyframes cdPulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+        
+        .generating-bar { animation: genBar 4s ease-in-out forwards; }
+        @keyframes genBar { 0%{width:0} 15%{width:20%} 40%{width:55%} 70%{width:80%} 90%{width:92%} 100%{width:100%} }
+        
+        .shake { animation: shake 0.5s ease-in-out; }
+        @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+        
+        .pop { animation: pop 0.3s ease-out; }
+        @keyframes pop { 0%{transform:scale(1)} 50%{transform:scale(1.1)} 100%{transform:scale(1)} }
+        
+        input[type="file"] { display:none; }
+        
+        .opt { transition: all 0.2s; cursor:pointer; -webkit-user-select:none; user-select:none; }
+        .opt:hover { transform:scale(1.03); }
+        .opt.sel { border-color:#a855f7 !important; background:rgba(168,85,247,0.15) !important; transform:scale(1.03); }
+        
+        .haptic { -webkit-tap-highlight-color:transparent; }
+        .haptic:active { transform:scale(0.97); }
+        
+        .blurred { filter:blur(20px); pointer-events:none; }
+        
+        .timer-bar { animation: timerShrink 480s linear forwards; }
+        @keyframes timerShrink { from{width:100%} to{width:0%} }
+        
+        /* Confetti */
+        .confetti-piece { position:fixed; width:10px; height:10px; top:-10px; animation: confettiFall 3s ease-in forwards; }
+        @keyframes confettiFall { to{top:110vh; opacity:0; transform:rotate(720deg);} }
+    </style>
+</head>
+<body class="stars text-white min-h-screen select-none">
+
+<!-- ===== LANDING PAGE ===== -->
+<div id="landing" class="min-h-screen flex flex-col items-center justify-center px-5 text-center">
+    <div class="max-w-sm mx-auto">
+        <div class="text-7xl mb-5 float">🍼</div>
+        <h1 class="text-3xl font-black mb-2 glow-text tracking-tight">BabyVibe AI</h1>
+        <p class="text-xl font-bold text-purple-200 mb-4 leading-snug">See What Your Future Baby<br>Will Actually Look Like</p>
+        
+        <div class="flex items-center justify-center gap-3 mb-5 text-sm text-purple-300">
+            <span>★★★★★ <b class="text-white">4.8</b></span>
+            <span class="text-purple-500">•</span>
+            <span>2M+ babies generated</span>
+        </div>
+
+        <div class="flex justify-center gap-3 mb-5">
+            <div class="bg-purple-950/50 border border-purple-800/20 rounded-xl px-3 py-2 text-xs text-purple-200">🔮 AI-Powered</div>
+            <div class="bg-purple-950/50 border border-purple-800/20 rounded-xl px-3 py-2 text-xs text-purple-200">📸 Photo-Based</div>
+            <div class="bg-purple-950/50 border border-purple-800/20 rounded-xl px-3 py-2 text-xs text-purple-200">⚡ 60 Seconds</div>
+        </div>
+        
+        <div class="space-y-2 mb-5 text-left">
+            <div class="bg-purple-950/30 rounded-xl p-3 text-sm">
+                <span class="text-yellow-400">"</span><span class="text-purple-100">We literally screamed — it has my husband's eyes and my nose. This is insane.</span><span class="text-yellow-400">"</span>
+                <div class="text-purple-500 text-xs mt-1">— Sarah & Mike, married 2 years</div>
+            </div>
+            <div class="bg-purple-950/30 rounded-xl p-3 text-sm">
+                <span class="text-yellow-400">"</span><span class="text-purple-100">I'm single and did this for fun. Now I can't stop thinking about it. Help.</span><span class="text-yellow-400">"</span>
+                <div class="text-purple-500 text-xs mt-1">— Jessica, 26</div>
+            </div>
+            <div class="bg-purple-950/30 rounded-xl p-3 text-sm">
+                <span class="text-yellow-400">"</span><span class="text-purple-100">Showed my mom and she immediately started buying baby clothes 💀</span><span class="text-yellow-400">"</span>
+                <div class="text-purple-500 text-xs mt-1">— Aisha & Dev, engaged</div>
+            </div>
+        </div>
+
+        <div class="bg-purple-900/20 border border-purple-700/20 rounded-lg p-2.5 mb-5 text-center text-sm">
+            <span class="text-yellow-400">⚡</span> <span class="text-purple-200 font-medium" id="live-counter">184</span> <span class="text-purple-400">couples generating their baby right now</span>
+        </div>
+        
+        <button onclick="go('landing','s1')" class="haptic w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-400 hover:to-pink-400 text-white font-extrabold py-4 px-8 rounded-2xl text-lg glow transition-all">
+            See My Future Baby ✦
+        </button>
+        <p class="text-purple-600 text-xs mt-2">Free quiz • No credit card needed • See results in 60 seconds</p>
+    </div>
+</div>
+
+<!-- ===== QUIZ CONTAINER ===== -->
+<div id="quiz" class="hidden min-h-screen flex flex-col">
+    <div class="w-full bg-purple-950 h-1"><div id="prog" class="progress-fill h-full bg-gradient-to-r from-purple-500 to-pink-500" style="width:0%"></div></div>
+    
+    <div class="flex-1 flex items-center justify-center px-5 py-4">
+
+<!-- S1: Gender -->
+<div id="s1" class="step active flex-col items-center max-w-sm mx-auto w-full slide-in">
+    <p class="text-purple-400 text-xs mb-1">About You · Step 1 of 22</p>
+    <h2 class="text-xl font-extrabold mb-1 text-center">I identify as… 👤</h2>
+    <p class="text-purple-400 text-xs mb-4 text-center">This helps us personalize your results</p>
+    <div class="grid grid-cols-3 gap-2.5 w-full">
+        <div onclick="pick(this,'gender','male')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-5 flex flex-col items-center gap-1.5"><span class="text-3xl">👨</span><span class="text-xs font-medium">Male</span></div>
+        <div onclick="pick(this,'gender','female')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-5 flex flex-col items-center gap-1.5"><span class="text-3xl">👩</span><span class="text-xs font-medium">Female</span></div>
+        <div onclick="pick(this,'gender','nb')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-5 flex flex-col items-center gap-1.5"><span class="text-3xl">🌊</span><span class="text-xs font-medium">Non-binary</span></div>
+    </div>
+</div>
+
+<!-- S2: Interested in -->
+<div id="s2" class="step flex-col items-center max-w-sm mx-auto w-full slide-in">
+    <p class="text-purple-400 text-xs mb-1">About You · Step 2 of 22</p>
+    <h2 class="text-xl font-extrabold mb-4 text-center">Who are you drawn to? 💕</h2>
+    <div class="grid grid-cols-3 gap-2.5 w-full">
+        <div onclick="pick(this,'into','men')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-5 flex flex-col items-center gap-1.5"><span class="text-3xl">👨</span><span class="text-xs font-medium">Men</span></div>
+        <div onclick="pick(this,'into','women')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-5 flex flex-col items-center gap-1.5"><span class="text-3xl">👩</span><span class="text-xs font-medium">Women</span></div>
+        <div onclick="pick(this,'into','both')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-5 flex flex-col items-center gap-1.5"><span class="text-3xl">💫</span><span class="text-xs font-medium">Both</span></div>
+    </div>
+</div>
+
+<!-- S3: Age -->
+<div id="s3" class="step flex-col items-center max-w-sm mx-auto w-full slide-in">
+    <p class="text-purple-400 text-xs mb-1">About You · Step 3 of 22</p>
+    <h2 class="text-xl font-extrabold mb-4 text-center">How old are you? 🎂</h2>
+    <div class="grid grid-cols-2 gap-2.5 w-full">
+        <div onclick="pick(this,'age','18-24')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">🌱</span><span class="text-xs font-medium">18–24 · Just beginning</span></div>
+        <div onclick="pick(this,'age','25-34')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">🌟</span><span class="text-xs font-medium">25–34 · Finding your path</span></div>
+        <div onclick="pick(this,'age','35-44')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">💫</span><span class="text-xs font-medium">35–44 · Coming into your own</span></div>
+        <div onclick="pick(this,'age','45+')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">🔮</span><span class="text-xs font-medium">45+ · Deep wisdom</span></div>
+    </div>
+</div>
+
+<!-- S4: Relationship Status -->
+<div id="s4" class="step flex-col items-center max-w-sm mx-auto w-full slide-in">
+    <p class="text-purple-400 text-xs mb-1">About You · Step 4 of 22</p>
+    <h2 class="text-xl font-extrabold mb-4 text-center">Your relationship status? 💍</h2>
+    <div class="grid grid-cols-2 gap-2.5 w-full">
+        <div onclick="pick(this,'rel','single')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">🦋</span><span class="text-xs font-medium">Single & open</span></div>
+        <div onclick="pick(this,'rel','dating')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">💑</span><span class="text-xs font-medium">Dating</span></div>
+        <div onclick="pick(this,'rel','engaged')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">💍</span><span class="text-xs font-medium">Engaged</span></div>
+        <div onclick="pick(this,'rel','married')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">👰</span><span class="text-xs font-medium">Married</span></div>
+    </div>
+</div>
+
+<!-- VALIDATION 1 -->
+<div id="v1" class="step flex-col items-center max-w-sm mx-auto w-full text-center slide-in validation-fade">
+    <div class="text-5xl mb-4">✨</div>
+    <h2 class="text-xl font-extrabold mb-2">Your Energy Profile</h2>
+    <p class="text-purple-200 text-sm mb-3">A <span class="text-yellow-400 font-bold">passionate, magnetic</span> soul.</p>
+    <p class="text-purple-300 text-sm mb-6">There's a rare intensity to your love energy. When you commit, it's all the way. Your future child will inherit that fire.</p>
+    <button onclick="next()" class="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white font-bold py-3 px-6 rounded-2xl">Continue →</button>
+</div>
+
+<!-- S5: Season -->
+<div id="s5" class="step flex-col items-center max-w-sm mx-auto w-full slide-in">
+    <p class="text-purple-400 text-xs mb-1">Your Instincts · Step 5 of 22</p>
+    <h2 class="text-xl font-extrabold mb-1 text-center">What season feels like home? 🍂</h2>
+    <p class="text-purple-400 text-xs mb-4 text-center">This reveals your parenting instinct</p>
+    <div class="grid grid-cols-2 gap-2.5 w-full">
+        <div onclick="pick(this,'season','autumn')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">🍂</span><span class="text-xs font-medium">Autumn · Warm & cozy</span></div>
+        <div onclick="pick(this,'season','summer')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">☀️</span><span class="text-xs font-medium">Summer · Bold & alive</span></div>
+        <div onclick="pick(this,'season','spring')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">🌸</span><span class="text-xs font-medium">Spring · Fresh & hopeful</span></div>
+        <div onclick="pick(this,'season','winter')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">❄️</span><span class="text-xs font-medium">Winter · Deep & intuitive</span></div>
+    </div>
+</div>
+
+<!-- S6: When alive -->
+<div id="s6" class="step flex-col items-center max-w-sm mx-auto w-full slide-in">
+    <p class="text-purple-400 text-xs mb-1">Your Instincts · Step 6 of 22</p>
+    <h2 class="text-xl font-extrabold mb-4 text-center">When do you feel most alive? ⚡</h2>
+    <div class="space-y-2.5 w-full">
+        <div onclick="pick(this,'alive','night')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-3.5 flex items-center gap-3"><span class="text-2xl">🌙</span><span class="text-sm font-medium">Late night · The world is yours</span></div>
+        <div onclick="pick(this,'alive','evening')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-3.5 flex items-center gap-3"><span class="text-2xl">🌆</span><span class="text-sm font-medium">Golden hour · Warm & reflective</span></div>
+        <div onclick="pick(this,'alive','afternoon')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-3.5 flex items-center gap-3"><span class="text-2xl">☀️</span><span class="text-sm font-medium">Afternoon · Full momentum</span></div>
+        <div onclick="pick(this,'alive','morning')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-3.5 flex items-center gap-3"><span class="text-2xl">🌅</span><span class="text-sm font-medium">Morning · Fresh & intentional</span></div>
+    </div>
+</div>
+
+<!-- S7: Spirit animal -->
+<div id="s7" class="step flex-col items-center max-w-sm mx-auto w-full slide-in">
+    <p class="text-purple-400 text-xs mb-1">Your Instincts · Step 7 of 22</p>
+    <h2 class="text-xl font-extrabold mb-1 text-center">Which animal is your spirit? 🐾</h2>
+    <p class="text-purple-400 text-xs mb-4 text-center">This reflects the parent you'll become</p>
+    <div class="grid grid-cols-2 gap-2.5 w-full">
+        <div onclick="pick(this,'animal','wolf')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">🐺</span><span class="text-xs font-medium">Wolf · Loyal protector</span></div>
+        <div onclick="pick(this,'animal','owl')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">🦉</span><span class="text-xs font-medium">Owl · Wise guide</span></div>
+        <div onclick="pick(this,'animal','dolphin')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">🐬</span><span class="text-xs font-medium">Dolphin · Playful teacher</span></div>
+        <div onclick="pick(this,'animal','bear')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">🐻</span><span class="text-xs font-medium">Bear · Fierce nurturer</span></div>
+    </div>
+</div>
+
+<!-- S8: Energy -->
+<div id="s8" class="step flex-col items-center max-w-sm mx-auto w-full slide-in">
+    <p class="text-purple-400 text-xs mb-1">Your Instincts · Step 8 of 22</p>
+    <h2 class="text-xl font-extrabold mb-4 text-center">What energy do you give off? 🌟</h2>
+    <div class="grid grid-cols-2 gap-2.5 w-full">
+        <div onclick="pick(this,'energy','mysterious')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">🌑</span><span class="text-xs font-medium">Mysterious · Deep</span></div>
+        <div onclick="pick(this,'energy','calm')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">🌿</span><span class="text-xs font-medium">Calm · Grounding</span></div>
+        <div onclick="pick(this,'energy','radiant')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">☀️</span><span class="text-xs font-medium">Radiant · Magnetic</span></div>
+        <div onclick="pick(this,'energy','electric')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">⚡</span><span class="text-xs font-medium">Electric · Unstoppable</span></div>
+    </div>
+</div>
+
+<!-- VALIDATION 2 -->
+<div id="v2" class="step flex-col items-center max-w-sm mx-auto w-full text-center slide-in validation-fade">
+    <div class="text-5xl mb-4">🌙</div>
+    <h2 class="text-xl font-extrabold mb-2">Instincts Received</h2>
+    <p class="text-purple-200 text-sm mb-1"><span class="text-yellow-400 font-bold">Warm, magnetic, protective.</span></p>
+    <p class="text-purple-300 text-sm mb-6">Your future baby inherits your emotional depth. The bond you'll share is rare — most people never experience this kind of connection.</p>
+    <button onclick="next()" class="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white font-bold py-3 px-6 rounded-2xl">Continue →</button>
+</div>
+
+<!-- S9: Parenting style -->
+<div id="s9" class="step flex-col items-center max-w-sm mx-auto w-full slide-in">
+    <p class="text-purple-400 text-xs mb-1">Your Style · Step 9 of 22</p>
+    <h2 class="text-xl font-extrabold mb-4 text-center">What kind of parent will you be? 🤱</h2>
+    <div class="space-y-2.5 w-full">
+        <div onclick="pick(this,'parent','strict')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-3.5 flex items-center gap-3"><span class="text-xl">😤</span><span class="text-sm font-medium">Strict but loving · They'll thank you later</span></div>
+        <div onclick="pick(this,'parent','cool')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-3.5 flex items-center gap-3"><span class="text-xl">😎</span><span class="text-sm font-medium">Cool parent · Best friend energy</span></div>
+        <div onclick="pick(this,'parent','gentle')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-3.5 flex items-center gap-3"><span class="text-xl">🕊️</span><span class="text-sm font-medium">Gentle · Nurture over discipline</span></div>
+        <div onclick="pick(this,'parent','creative')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-3.5 flex items-center gap-3"><span class="text-xl">🎨</span><span class="text-sm font-medium">Creative · Imagination-first</span></div>
+    </div>
+</div>
+
+<!-- S10: Values -->
+<div id="s10" class="step flex-col items-center max-w-sm mx-auto w-full slide-in">
+    <p class="text-purple-400 text-xs mb-1">Your Style · Step 10 of 22</p>
+    <h2 class="text-xl font-extrabold mb-4 text-center">Most important value to pass on? 💎</h2>
+    <div class="space-y-2.5 w-full">
+        <div onclick="pick(this,'value','kindness')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-3.5 flex items-center gap-3"><span class="text-xl">🌸</span><span class="text-sm font-medium">Kindness · Be good to others</span></div>
+        <div onclick="pick(this,'value','courage')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-3.5 flex items-center gap-3"><span class="text-xl">🦁</span><span class="text-sm font-medium">Courage · Chase your dreams</span></div>
+        <div onclick="pick(this,'value','creativity')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-3.5 flex items-center gap-3"><span class="text-xl">🎨</span><span class="text-sm font-medium">Creativity · Think different</span></div>
+        <div onclick="pick(this,'value','resilience')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-3.5 flex items-center gap-3"><span class="text-xl">💪</span><span class="text-sm font-medium">Resilience · Never give up</span></div>
+    </div>
+</div>
+
+<!-- S11: Love language -->
+<div id="s11" class="step flex-col items-center max-w-sm mx-auto w-full slide-in">
+    <p class="text-purple-400 text-xs mb-1">Your Style · Step 11 of 22</p>
+    <h2 class="text-xl font-extrabold mb-4 text-center">How do you show love? 💕</h2>
+    <div class="space-y-2.5 w-full">
+        <div onclick="pick(this,'love','touch')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-3.5 flex items-center gap-3"><span class="text-xl">🤗</span><span class="text-sm font-medium">Physical touch · Hugs solve everything</span></div>
+        <div onclick="pick(this,'love','time')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-3.5 flex items-center gap-3"><span class="text-xl">⏰</span><span class="text-sm font-medium">Quality time · Presence over presents</span></div>
+        <div onclick="pick(this,'love','words')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-3.5 flex items-center gap-3"><span class="text-xl">💬</span><span class="text-sm font-medium">Words · Say it with feeling</span></div>
+        <div onclick="pick(this,'love','acts')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-3.5 flex items-center gap-3"><span class="text-xl">🎁</span><span class="text-sm font-medium">Acts of service · Show don't tell</span></div>
+    </div>
+</div>
+
+<!-- S12: Biggest hope -->
+<div id="s12" class="step flex-col items-center max-w-sm mx-auto w-full slide-in">
+    <p class="text-purple-400 text-xs mb-1">Your Heart · Step 12 of 22</p>
+    <h2 class="text-xl font-extrabold mb-1 text-center">What's your biggest hope for your child? 🌟</h2>
+    <p class="text-purple-400 text-xs mb-4 text-center">This shapes their personality prediction</p>
+    <div class="space-y-2.5 w-full">
+        <div onclick="pick(this,'hope','happy')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-3.5 flex items-center gap-3"><span class="text-xl">😊</span><span class="text-sm font-medium">That they're truly happy</span></div>
+        <div onclick="pick(this,'hope','loved')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-3.5 flex items-center gap-3"><span class="text-xl">💜</span><span class="text-sm font-medium">That they know they're deeply loved</span></div>
+        <div onclick="pick(this,'hope','strong')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-3.5 flex items-center gap-3"><span class="text-xl">💪</span><span class="text-sm font-medium">That they're strong & independent</span></div>
+        <div onclick="pick(this,'hope','kind')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-3.5 flex items-center gap-3"><span class="text-xl">🌸</span><span class="text-sm font-medium">That they make the world kinder</span></div>
+    </div>
+</div>
+
+<!-- S13: Biggest fear -->
+<div id="s13" class="step flex-col items-center max-w-sm mx-auto w-full slide-in">
+    <p class="text-purple-400 text-xs mb-1">Your Heart · Step 13 of 22</p>
+    <h2 class="text-xl font-extrabold mb-1 text-center">Your biggest parenting fear? 🤔</h2>
+    <p class="text-purple-400 text-xs mb-4 text-center">Knowing this helps us predict their traits</p>
+    <div class="space-y-2.5 w-full">
+        <div onclick="pick(this,'fear','notenough')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-3.5 flex items-center gap-3"><span class="text-xl">💔</span><span class="text-sm font-medium">Not being enough for them</span></div>
+        <div onclick="pick(this,'fear','world')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-3.5 flex items-center gap-3"><span class="text-xl">🌍</span><span class="text-sm font-medium">The world being too harsh</span></div>
+        <div onclick="pick(this,'fear','connection')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-3.5 flex items-center gap-3"><span class="text-xl">🪞</span><span class="text-sm font-medium">Losing our connection</span></div>
+        <div onclick="pick(this,'fear','failing')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-3.5 flex items-center gap-3"><span class="text-xl">⚡</span><span class="text-sm font-medium">Failing at the most important job</span></div>
+    </div>
+</div>
+
+<!-- VALIDATION 3 -->
+<div id="v3" class="step flex-col items-center max-w-sm mx-auto w-full text-center slide-in validation-fade">
+    <div class="text-5xl mb-4">💜</div>
+    <h2 class="text-xl font-extrabold mb-2">Your Heart Is Clear</h2>
+    <p class="text-purple-200 text-sm mb-1">You're going to be <span class="text-yellow-400 font-bold">an incredible parent.</span></p>
+    <p class="text-purple-300 text-sm mb-6">The depth of care in your answers is rare. Your baby is going to feel more loved than most people ever experience. We can see it already.</p>
+    <button onclick="next()" class="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white font-bold py-3 px-6 rounded-2xl">Continue →</button>
+</div>
+
+<!-- S14: Your photo -->
+<div id="s14" class="step flex-col items-center max-w-sm mx-auto w-full slide-in">
+    <p class="text-purple-400 text-xs mb-1">The Scan · Step 14 of 22</p>
+    <h2 class="text-xl font-extrabold mb-1 text-center">Upload Your Photo 📸</h2>
+    <p class="text-purple-400 text-xs mb-4 text-center">Our AI analyzes your facial features to generate your baby</p>
+    <div id="p1" onclick="document.getElementById('f1').click()" class="w-40 h-40 mx-auto bg-purple-950/60 border-2 border-dashed border-purple-700/30 rounded-full flex flex-col items-center justify-center cursor-pointer hover:border-purple-500 transition-colors">
+        <span class="text-3xl mb-1">📷</span>
+        <span class="text-xs text-purple-300">Tap to upload</span>
+    </div>
+    <input type="file" id="f1" accept="image/*" onchange="uphoto(this,'p1')">
+</div>
+
+<!-- S15: Partner photo -->
+<div id="s15" class="step flex-col items-center max-w-sm mx-auto w-full slide-in">
+    <p class="text-purple-400 text-xs mb-1">The Scan · Step 15 of 22</p>
+    <h2 class="text-xl font-extrabold mb-1 text-center">Upload Partner's Photo 💑</h2>
+    <p class="text-purple-400 text-xs mb-4 text-center">Or upload a dream partner — we won't tell 😏</p>
+    <div id="p2" onclick="document.getElementById('f2').click()" class="w-40 h-40 mx-auto bg-purple-950/60 border-2 border-dashed border-purple-700/30 rounded-full flex flex-col items-center justify-center cursor-pointer hover:border-purple-500 transition-colors">
+        <span class="text-3xl mb-1">📷</span>
+        <span class="text-xs text-purple-300">Tap to upload</span>
+    </div>
+    <input type="file" id="f2" accept="image/*" onchange="uphoto(this,'p2')">
+</div>
+
+<!-- S16: Hair preference -->
+<div id="s16" class="step flex-col items-center max-w-sm mx-auto w-full slide-in">
+    <p class="text-purple-400 text-xs mb-1">Your Baby · Step 16 of 22</p>
+    <h2 class="text-xl font-extrabold mb-4 text-center">Which hair would be adorable? 💇</h2>
+    <div class="grid grid-cols-3 gap-2.5 w-full">
+        <div onclick="pick(this,'hair','dark')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">🌑</span><span class="text-xs font-medium">Dark</span></div>
+        <div onclick="pick(this,'hair','brown')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">🍂</span><span class="text-xs font-medium">Brown</span></div>
+        <div onclick="pick(this,'hair','blonde')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">☀️</span><span class="text-xs font-medium">Blonde</span></div>
+        <div onclick="pick(this,'hair','red')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">🔥</span><span class="text-xs font-medium">Red</span></div>
+        <div onclick="pick(this,'hair','curls')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">🌀</span><span class="text-xs font-medium">Curly</span></div>
+        <div onclick="pick(this,'hair','any')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">✨</span><span class="text-xs font-medium">Any</span></div>
+    </div>
+</div>
+
+<!-- S17: Eye preference -->
+<div id="s17" class="step flex-col items-center max-w-sm mx-auto w-full slide-in">
+    <p class="text-purple-400 text-xs mb-1">Your Baby · Step 17 of 22</p>
+    <h2 class="text-xl font-extrabold mb-4 text-center">Which eyes melt your heart? 👁️</h2>
+    <div class="space-y-2.5 w-full">
+        <div onclick="pick(this,'eyes','deep')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-3.5 flex items-center gap-3"><span class="text-xl">🌌</span><span class="text-sm font-medium">Deep & soulful</span></div>
+        <div onclick="pick(this,'eyes','bright')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-3.5 flex items-center gap-3"><span class="text-xl">✨</span><span class="text-sm font-medium">Bright & playful</span></div>
+        <div onclick="pick(this,'eyes','warm')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-3.5 flex items-center gap-3"><span class="text-xl">🍯</span><span class="text-sm font-medium">Warm & gentle</span></div>
+        <div onclick="pick(this,'eyes','mischievous')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-3.5 flex items-center gap-3"><span class="text-xl">😏</span><span class="text-sm font-medium">Mischievous & curious</span></div>
+    </div>
+</div>
+
+<!-- S18: Personality hope -->
+<div id="s18" class="step flex-col items-center max-w-sm mx-auto w-full slide-in">
+    <p class="text-purple-400 text-xs mb-1">Your Baby · Step 18 of 22</p>
+    <h2 class="text-xl font-extrabold mb-4 text-center">Your baby's personality will be… 🧬</h2>
+    <div class="grid grid-cols-2 gap-2.5 w-full">
+        <div onclick="pick(this,'bpersonality','bold')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">🔥</span><span class="text-xs font-medium">Bold & fearless</span></div>
+        <div onclick="pick(this,'bpersonality','sweet')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">🌸</span><span class="text-xs font-medium">Sweet & caring</span></div>
+        <div onclick="pick(this,'bpersonality','funny')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">😂</span><span class="text-xs font-medium">Hilarious & wild</span></div>
+        <div onclick="pick(this,'bpersonality','genius')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">🧠</span><span class="text-xs font-medium">Smart & curious</span></div>
+    </div>
+</div>
+
+<!-- VALIDATION 4 -->
+<div id="v4" class="step flex-col items-center max-w-sm mx-auto w-full text-center slide-in validation-fade">
+    <div class="text-5xl mb-4">🍼</div>
+    <h2 class="text-xl font-extrabold mb-2">Taking Shape</h2>
+    <p class="text-purple-200 text-sm mb-1"><span class="text-yellow-400 font-bold">Dark hair, bright eyes, fearless heart.</span></p>
+    <p class="text-purple-300 text-sm mb-6">We can already see them. The features are blending beautifully. Your baby is going to stop people in their tracks.</p>
+    <button onclick="next()" class="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white font-bold py-3 px-6 rounded-2xl">Continue →</button>
+</div>
+
+<!-- S19: Life goals -->
+<div id="s19" class="step flex-col items-center max-w-sm mx-auto w-full slide-in">
+    <p class="text-purple-400 text-xs mb-1">The Vision · Step 19 of 22</p>
+    <h2 class="text-xl font-extrabold mb-1 text-center">What do you want for your family? 🏡</h2>
+    <p class="text-purple-400 text-xs mb-4 text-center">Pick all that apply</p>
+    <div class="grid grid-cols-2 gap-2.5 w-full">
+        <div onclick="toggle(this)" data-v="home" class="opt multi bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">🏡</span><span class="text-xs font-medium">Build a home</span></div>
+        <div onclick="toggle(this)" data-v="travel" class="opt multi bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">✈️</span><span class="text-xs font-medium">Travel the world</span></div>
+        <div onclick="toggle(this)" data-v="simple" class="opt multi bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">🌿</span><span class="text-xs font-medium">Simple & peaceful</span></div>
+        <div onclick="toggle(this)" data-v="build" class="opt multi bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-2xl">🚀</span><span class="text-xs font-medium">Build something big</span></div>
+    </div>
+    <button onclick="next()" class="mt-4 w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white font-bold py-3 px-6 rounded-2xl">Continue →</button>
+</div>
+
+<!-- S20: Ideal day -->
+<div id="s20" class="step flex-col items-center max-w-sm mx-auto w-full slide-in">
+    <p class="text-purple-400 text-xs mb-1">The Vision · Step 20 of 22</p>
+    <h2 class="text-xl font-extrabold mb-4 text-center">Ideal family Sunday? ☀️</h2>
+    <div class="space-y-2.5 w-full">
+        <div onclick="pick(this,'sunday','park')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-3.5 flex items-center gap-3"><span class="text-xl">🌳</span><span class="text-sm font-medium">Park, playground, ice cream</span></div>
+        <div onclick="pick(this,'sunday','home')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-3.5 flex items-center gap-3"><span class="text-xl">🎬</span><span class="text-sm font-medium">Blanket fort & movie marathon</span></div>
+        <div onclick="pick(this,'sunday','adventure')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-3.5 flex items-center gap-3"><span class="text-xl">🏔️</span><span class="text-sm font-medium">Adventure somewhere new</span></div>
+        <div onclick="pick(this,'sunday','cooking')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-3.5 flex items-center gap-3"><span class="text-xl">🍳</span><span class="text-sm font-medium">Cooking together in the kitchen</span></div>
+    </div>
+</div>
+
+<!-- S21: Ready question -->
+<div id="s21" class="step flex-col items-center max-w-sm mx-auto w-full slide-in">
+    <p class="text-purple-400 text-xs mb-1">The Vision · Step 21 of 22</p>
+    <h2 class="text-xl font-extrabold mb-4 text-center">Are you ready to see your baby? 👶</h2>
+    <div class="space-y-2.5 w-full">
+        <div onclick="pick(this,'ready','yes')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-3xl">✨</span><span class="text-sm font-bold">I'm ready!</span></div>
+        <div onclick="pick(this,'ready','nervous')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-3xl">🥺</span><span class="text-sm font-bold">Nervous but excited</span></div>
+        <div onclick="pick(this,'ready','notyet')" class="opt bg-purple-950/60 border-2 border-purple-800/20 rounded-2xl p-4 flex flex-col items-center gap-1"><span class="text-3xl">🙈</span><span class="text-sm font-bold">Not yet… okay fine yes</span></div>
+    </div>
+</div>
+
+<!-- S22: Signal captured -->
+<div id="s22" class="step flex-col items-center max-w-sm mx-auto w-full text-center slide-in validation-fade">
+    <div class="text-5xl mb-4">🔮</div>
+    <h2 class="text-xl font-extrabold mb-2">Everything Encoded</h2>
+    <p class="text-yellow-400 font-bold text-2xl mb-2">38 signals captured.</p>
+    <p class="text-purple-300 text-sm mb-6">Your facial features. Your partner's features. Your instincts. Your hopes. Your fears. Your baby is already taking shape in our system.</p>
+    <button onclick="startGen()" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-extrabold py-4 px-8 rounded-2xl text-lg glow">Generate My Baby ✦</button>
+</div>
+
+    </div>
+</div>
+
+<!-- ===== GENERATING SCREEN ===== -->
+<div id="gen" class="hidden min-h-screen flex flex-col items-center justify-center px-5 text-center">
+    <div class="max-w-sm mx-auto">
+        <div class="text-6xl mb-5 float">🔬</div>
+        <h2 class="text-2xl font-extrabold mb-2">Generating your baby…</h2>
+        <p class="text-purple-300 text-sm mb-6">This is the moment that changes everything</p>
+        <div class="w-full bg-purple-950 rounded-full h-2.5 mb-4 overflow-hidden">
+            <div class="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full generating-bar"></div>
+        </div>
+        <div id="gen-status" class="text-purple-400 text-sm space-y-1.5">
+            <p>🔍 Scanning facial structure…</p>
+        </div>
+    </div>
+</div>
+
+<!-- ===== EMAIL CAPTURE ===== -->
+<div id="email-gate" class="hidden min-h-screen flex flex-col items-center justify-center px-5 text-center">
+    <div class="max-w-sm mx-auto">
+        <div class="text-6xl mb-4">🎉</div>
+        <h2 class="text-2xl font-extrabold mb-2">Your baby is ready!</h2>
+        <p class="text-purple-300 text-sm mb-6">Where should we send your result?</p>
+        <div class="w-full space-y-3">
+            <input type="email" id="em" placeholder="your@email.com" class="w-full bg-purple-950/60 border border-purple-700/30 rounded-xl px-4 py-3.5 text-white placeholder-purple-500 focus:outline-none focus:border-purple-500 text-center text-lg">
+            <button onclick="subEmail()" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-400 hover:to-pink-400 text-white font-extrabold py-4 px-6 rounded-2xl text-lg transition-all">
+                See My Baby 🍼
+            </button>
+        </div>
+        <p class="text-purple-600 text-xs mt-3">We respect your privacy. No spam, ever.</p>
+    </div>
+</div>
+
+<!-- ===== RESULT PAGE (BLURRED) ===== -->
+<div id="result" class="hidden min-h-screen flex flex-col items-center px-5 py-8">
+    <div class="max-w-sm mx-auto w-full">
+        <div class="text-center mb-4">
+            <h2 class="text-2xl font-extrabold mb-1">Your Future Baby 🍼</h2>
+            <p class="text-purple-300 text-sm">AI-generated from your photos & personality</p>
+        </div>
+        
+        <!-- Blurred baby -->
+        <div class="relative mx-auto w-56 h-56 mb-4">
+            <div class="w-full h-full rounded-3xl bg-gradient-to-br from-purple-400/20 to-pink-400/20 border-2 border-purple-500/30 flex items-center justify-center pulse-glow overflow-hidden">
+                <div class="text-center blurred" id="baby-img">
+                    <div class="text-7xl">👶</div>
+                </div>
+                <div class="absolute inset-0 flex items-center justify-center bg-black/40 rounded-3xl">
+                    <div class="text-center">
+                        <div class="text-3xl mb-1">🔒</div>
+                        <p class="text-white font-bold text-sm">Unlock to reveal</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Partial traits (visible) -->
+        <div class="flex justify-center gap-2 mb-4 flex-wrap">
+            <span class="bg-purple-900/40 border border-purple-700/20 rounded-full px-3 py-1 text-xs">💜 Emotionally deep</span>
+            <span class="bg-purple-900/40 border border-purple-700/20 rounded-full px-3 py-1 text-xs">🔥 Fearless</span>
+            <span class="bg-purple-900/40 border border-purple-700/20 rounded-full px-3 py-1 text-xs">✨ Curious</span>
+        </div>
+
+        <div class="text-center mb-4">
+            <p class="text-yellow-400 text-sm font-bold countdown-pulse">⏱ Special offer expires in <span id="timer">8:00</span></p>
+        </div>
+        
+        <button onclick="showPaywall()" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-400 hover:to-pink-400 text-white font-extrabold py-4 px-8 rounded-2xl text-lg glow transition-all">
+            Reveal My Baby ✦
+        </button>
+        <p class="text-purple-500 text-xs mt-2 text-center">Starting at $1 trial • Cancel anytime</p>
+    </div>
+</div>
+
+<!-- ===== PAYWALL / PRICING ===== -->
+<div id="paywall" class="hidden min-h-screen flex flex-col items-center px-5 py-6">
+    <div class="max-w-sm mx-auto w-full">
+        <div class="text-center mb-4">
+            <div class="inline-block bg-yellow-500/20 border border-yellow-500/30 rounded-full px-4 py-1 mb-2">
+                <span class="text-yellow-400 font-bold text-xs">🎉 CONGRATULATIONS — LIMITED OFFER</span>
+            </div>
+            <h2 class="text-xl font-extrabold mb-1">99% OFF Today Only</h2>
+            <p class="text-purple-400 text-xs line-through">Regular $49.99/month</p>
+        </div>
+
+        <!-- Timer bar -->
+        <div class="w-full bg-purple-950 rounded-full h-1.5 mb-4">
+            <div class="h-full bg-gradient-to-r from-yellow-500 to-red-500 rounded-full timer-bar"></div>
+        </div>
+
+        <!-- What you get -->
+        <div class="bg-purple-950/60 border border-purple-800/20 rounded-2xl p-4 mb-4 space-y-3">
+            <div class="flex items-start gap-3">
+                <span class="text-green-400 text-lg">✓</span>
+                <div>
+                    <p class="text-sm font-bold">Baby Portrait (AI-Generated)</p>
+                    <p class="text-purple-400 text-xs line-through">$12.00</p>
+                </div>
+            </div>
+            <div class="flex items-start gap-3">
+                <span class="text-green-400 text-lg">✓</span>
+                <div>
+                    <p class="text-sm font-bold">Personality Prediction Report</p>
+                    <p class="text-purple-400 text-xs line-through">$10.00</p>
+                </div>
+            </div>
+            <div class="flex items-start gap-3">
+                <span class="text-green-400 text-lg">✓</span>
+                <div>
+                    <p class="text-sm font-bold">Age Progression Pack (5 stages)</p>
+                    <p class="text-purple-400 text-xs line-through">$15.00</p>
+                </div>
+            </div>
+            <div class="flex items-start gap-3">
+                <span class="text-green-400 text-lg">✓</span>
+                <div>
+                    <p class="text-sm font-bold">Parent Compatibility Score</p>
+                    <p class="text-purple-400 text-xs line-through">$8.00</p>
+                </div>
+            </div>
+            <div class="border-t border-purple-800/20 pt-3">
+                <div class="flex justify-between text-sm"><span>Retail value</span><span class="line-through text-purple-400">$45.00</span></div>
+                <div class="flex justify-between text-sm"><span>Today's discount (99%)</span><span class="text-green-400">-$44.00</span></div>
+                <div class="flex justify-between font-extrabold text-lg mt-1"><span>YOU PAY TODAY</span><span class="text-yellow-400">$1.00</span></div>
+            </div>
+        </div>
+
+        <!-- Sliding scale -->
+        <div class="bg-purple-950/40 border border-purple-700/20 rounded-2xl p-4 mb-4">
+            <p class="text-sm font-bold mb-3 text-center">Choose your trial price 💛</p>
+            <div class="grid grid-cols-4 gap-2">
+                <button onclick="setPrice(1)" id="pr-1" class="price-opt bg-purple-600 border-2 border-purple-400 rounded-xl py-2.5 text-center font-bold text-sm">$1</button>
+                <button onclick="setPrice(5)" id="pr-5" class="price-opt bg-purple-950/60 border-2 border-purple-800/20 rounded-xl py-2.5 text-center font-bold text-sm">$5</button>
+                <button onclick="setPrice(9)" id="pr-9" class="price-opt bg-purple-950/60 border-2 border-purple-800/20 rounded-xl py-2.5 text-center font-bold text-sm">$9</button>
+                <button onclick="setPrice(15)" id="pr-15" class="price-opt bg-purple-950/60 border-2 border-purple-800/20 rounded-xl py-2.5 text-center font-bold text-sm">$15</button>
+            </div>
+            <p class="text-purple-500 text-xs mt-2 text-center">This helps us keep generating babies for everyone 💜</p>
+        </div>
+
+        <!-- Testimonials -->
+        <div class="bg-purple-950/30 rounded-xl p-3 mb-4 text-sm">
+            <p class="text-yellow-400">"</p><p class="text-purple-100">Got the $1 deal. The baby literally looks like a mix of both of us. My mom started crying.</p>
+            <p class="text-purple-500 text-xs mt-1">— @sarah.mike.couple</p>
+        </div>
+
+        <!-- Guarantee -->
+        <div class="flex items-center justify-center gap-2 mb-4 text-sm text-purple-300">
+            <span>🛡️</span><span>7-day money-back guarantee</span>
+        </div>
+
+        <button onclick="spinWheel()" class="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-black font-extrabold py-4 px-8 rounded-2xl text-lg glow-gold transition-all">
+            🎰 Spin for $1 Trial!
+        </button>
+        <p class="text-purple-500 text-xs mt-2 text-center">$1 trial today. After 7 days: $29.99/mo unless canceled.</p>
+    </div>
+</div>
+
+<!-- ===== SPIN THE WHEEL ===== -->
+<div id="spinner" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50 px-5">
+    <div class="max-w-sm mx-auto text-center">
+        <h2 class="text-2xl font-extrabold mb-4">🎁 You've unlocked 1 free spin!</h2>
+        <div class="relative mx-auto w-64 h-64 mb-6">
+            <div id="wheel" class="w-full h-full rounded-full border-4 border-yellow-500 flex items-center justify-center spin-wheel" style="background: conic-gradient(#9333ea 0deg 45deg, #f59e0b 45deg 90deg, #7e22ce 90deg 135deg, #fbbf24 135deg 180deg, #6b21a8 180deg 225deg, #f59e0b 225deg 270deg, #581c87 270deg 315deg, #fbbf24 315deg 360deg);">
+                <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center z-10 shadow-lg">
+                    <span class="text-2xl">🎰</span>
+                </div>
+            </div>
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2 text-3xl">▼</div>
+        </div>
+        <button onclick="doSpin()" id="spin-btn" class="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-black font-extrabold py-4 rounded-2xl text-lg">
+            SPIN! 🎰
+        </button>
+    </div>
+</div>
+
+<!-- ===== WIN MODAL ===== -->
+<div id="win-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50 px-5">
+    <div class="max-w-sm mx-auto text-center bg-gradient-to-b from-purple-900 to-purple-950 border border-purple-600/30 rounded-3xl p-6">
+        <div class="text-5xl mb-3">🎉</div>
+        <h2 class="text-2xl font-extrabold mb-2">$1 TRIAL!</h2>
+        <p class="text-purple-200 text-sm mb-4">You won the $1 trial! Your baby is waiting to be revealed.</p>
+        <button onclick="checkout()" class="w-full bg-gradient-to-r from-green-500 to-emerald-500 text-white font-extrabold py-4 rounded-2xl text-lg mb-2">
+            Start $1 Trial 🔒
+        </button>
+        <p class="text-purple-500 text-xs">7-day free trial • $29.99/mo after • Cancel anytime</p>
+    </div>
+</div>
+
+<!-- ===== CHECKOUT ===== -->
+<div id="checkout" class="hidden min-h-screen flex flex-col items-center px-5 py-6">
+    <div class="max-w-sm mx-auto w-full">
+        <h2 class="text-xl font-extrabold mb-1 text-center">Complete Your Order</h2>
+        <p class="text-purple-300 text-sm mb-4 text-center">$1 trial today — reveal your baby instantly</p>
+        
+        <!-- Order bump -->
+        <div class="bg-gradient-to-r from-yellow-900/20 to-orange-900/20 border border-yellow-600/30 rounded-2xl p-4 mb-4">
+            <label class="flex items-start gap-3 cursor-pointer">
+                <input type="checkbox" id="bump" onchange="updTotal()" class="mt-1 accent-yellow-500 w-5 h-5">
+                <div>
+                    <p class="font-bold text-sm">⚡ Yes! Add HD Family Portrait — $14</p>
+                    <p class="text-purple-300 text-xs mt-1">Print-ready family photo with your AI baby. Includes both parents + baby.</p>
+                </div>
+            </label>
+        </div>
+
+        <div class="bg-purple-950/60 border border-purple-800/20 rounded-2xl p-4 mb-4">
+            <div class="space-y-2 text-sm">
+                <div class="flex justify-between"><span>BabyVibe AI Trial</span><span class="text-purple-400">$1.00</span></div>
+                <div id="bump-line" class="hidden flex justify-between"><span>💎 HD Family Portrait</span><span class="text-purple-400">$14.00</span></div>
+                <div class="border-t border-purple-800/20 pt-2 flex justify-between font-bold">
+                    <span>Today</span><span id="total">$1.00</span>
+                </div>
+            </div>
+            <p class="text-purple-500 text-xs mt-2">Then $29.99/mo. Cancel anytime.</p>
+        </div>
+
+        <div class="bg-purple-950/60 border border-purple-800/20 rounded-2xl p-4 mb-4">
+            <div class="space-y-2.5">
+                <input type="text" placeholder="Card number" class="w-full bg-purple-950 border border-purple-700/30 rounded-xl px-4 py-3 text-white placeholder-purple-500 text-sm focus:outline-none focus:border-purple-500">
+                <div class="grid grid-cols-2 gap-2.5">
+                    <input type="text" placeholder="MM/YY" class="w-full bg-purple-950 border border-purple-700/30 rounded-xl px-4 py-3 text-white placeholder-purple-500 text-sm focus:outline-none focus:border-purple-500">
+                    <input type="text" placeholder="CVC" class="w-full bg-purple-950 border border-purple-700/30 rounded-xl px-4 py-3 text-white placeholder-purple-500 text-sm focus:outline-none focus:border-purple-500">
+                </div>
+            </div>
+        </div>
+        
+        <button onclick="processPayment()" class="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-400 hover:to-emerald-400 text-white font-extrabold py-4 rounded-2xl text-lg transition-all">
+            Start $1 Trial 🔒
+        </button>
+        <p class="text-purple-500 text-xs mt-2 text-center">🔒 Secure • 256-bit SSL • 7-day guarantee</p>
+        <div class="mt-3 flex justify-center gap-3 text-purple-600 text-xs">
+            <span>Visa</span><span>Mastercard</span><span>Amex</span><span>Apple Pay</span>
+        </div>
+    </div>
+</div>
+
+<!-- ===== THANK YOU ===== -->
+<div id="thanks" class="hidden min-h-screen flex flex-col items-center justify-center px-5 text-center">
+    <div class="max-w-sm mx-auto">
+        <div class="text-7xl mb-5">🎉</div>
+        <h2 class="text-3xl font-extrabold mb-3">Your Baby Is Revealed!</h2>
+        
+        <div class="relative mx-auto w-56 h-56 mb-6">
+            <div class="w-full h-full rounded-3xl bg-gradient-to-br from-purple-400/20 to-pink-400/20 border-2 border-purple-500/30 flex items-center justify-center pulse-glow">
+                <div class="text-center">
+                    <div class="text-7xl mb-1">👶</div>
+                    <p class="text-purple-300 text-xs">Your Future Baby</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-purple-950/60 border border-purple-800/20 rounded-2xl p-4 mb-4 text-left">
+            <p class="text-sm space-y-1.5">
+                ✉️ HD baby image sent to your email<br>
+                📸 Age progression pack included<br>
+                🔮 Full personality reading attached<br>
+                🎁 Referral link: share for free HD upgrade
+            </p>
+        </div>
+
+        <div class="bg-purple-950/40 border border-purple-800/20 rounded-xl p-3 mb-4">
+            <p class="text-sm font-bold mb-1">🎁 Refer a couple, get HD portrait FREE</p>
+            <p class="text-purple-400 text-xs">Share your unique link with friends</p>
+        </div>
+
+        <button onclick="shareResult()" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-3 px-6 rounded-2xl">
+            Share Your Baby 👶
+        </button>
+    </div>
+</div>
+
+<script>
+// State
+let step=1, total=22, data={multis:[]}, price=1, spun=false;
+
+// Live counter
+setInterval(()=>{const e=document.getElementById('live-counter');e.textContent=184+Math.floor(Math.random()*30)-15},4000);
+
+// Timer
+let timerSec=480;
+setInterval(()=>{
+    if(timerSec>0){timerSec--;const m=Math.floor(timerSec/60),s=timerSec%60;document.getElementById('timer').textContent=m+':'+(s<10?'0':'')+s;}
+},1000);
+
+// Haptic
+function haptic(){if(navigator.vibrate)navigator.vibrate(10);}
+
+function go(from,to){
+    document.getElementById(from).classList.add('hidden');
+    document.getElementById(to==='quiz'?'quiz':to).classList.remove('hidden');
+    updProg();
+}
+
+function pick(el,field,val){
+    haptic();
+    data[field]=val;
+    el.parentElement.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));
+    el.classList.add('sel');
+    setTimeout(()=>next(),350);
+}
+
+function toggle(el){
+    haptic();
+    el.classList.toggle('sel');
+    const v=el.dataset.v;
+    if(data.multis.includes(v))data.multis=data.multis.filter(x=>x!==v);
+    else data.multis.push(v);
+}
+
+function next(){
+    step++;
+    // Hide current, show next
+    const cur=document.querySelector('.step.active');
+    if(cur)cur.classList.remove('active');
+    // Map steps to IDs
+    const steps=['s1','s2','s3','s4','v1','s5','s6','s7','s8','v2','s9','s10','s11','s12','s13','v3','s14','s15','s16','s17','s18','v4','s19','s20','s21','s22'];
+    if(step<=steps.length){
+        const next=document.getElementById(steps[step-1]);
+        if(next){next.classList.add('active');next.classList.add('slide-in');}
+    }
+    updProg();
+}
+
+function updProg(){document.getElementById('prog').style.width=(step/total*100)+'%';}
+
+function uphoto(input,id){
+    if(input.files&&input.files[0]){
+        const r=new FileReader();
+        r.onload=e=>{document.getElementById(id).innerHTML=`<img src="${e.target.result}" class="w-full h-full object-cover rounded-full">`;};
+        r.readAsDataURL(input.files[0]);
+        setTimeout(()=>next(),500);
+    }
+}
+
+function startGen(){
+    document.getElementById('quiz').classList.add('hidden');
+    document.getElementById('gen').classList.remove('hidden');
+    const msgs=['🔍 Scanning facial structure…','🧬 Analyzing DNA patterns…','✨ Blending facial features…','🎨 Generating baby face…','📊 Calculating personality traits…','👶 Almost ready…'];
+    let i=0;const se=document.getElementById('gen-status');
+    const iv=setInterval(()=>{
+        i++;
+        if(i<msgs.length){se.innerHTML=msgs.slice(0,i+1).map(m=>'<p>'+m+'</p>').join('');}
+        else{clearInterval(iv);setTimeout(()=>{document.getElementById('gen').classList.add('hidden');document.getElementById('email-gate').classList.remove('hidden');},500);}
+    },700);
+}
+
+function subEmail(){
+    const em=document.getElementById('em').value;
+    if(!em||!em.includes('@')){document.getElementById('em').style.borderColor='#ef4444';return;}
+    data.email=em;
+    document.getElementById('email-gate').classList.add('hidden');
+    document.getElementById('result').classList.remove('hidden');
+}
+
+function showPaywall(){
+    document.getElementById('result').classList.add('hidden');
+    document.getElementById('paywall').classList.remove('hidden');
+}
+
+function setPrice(p){
+    price=p;
+    document.querySelectorAll('.price-opt').forEach(b=>{b.classList.remove('bg-purple-600','border-purple-400');b.classList.add('bg-purple-950/60','border-purple-800/20');});
+    document.getElementById('pr-'+p).classList.add('bg-purple-600','border-purple-400');
+    document.getElementById('pr-'+p).classList.remove('bg-purple-950/60','border-purple-800/20');
+}
+
+function spinWheel(){
+    document.getElementById('paywall').classList.add('hidden');
+    document.getElementById('spinner').classList.remove('hidden');
+}
+
+function doSpin(){
+    if(spun)return;spun=true;
+    haptic();
+    document.getElementById('spin-btn').textContent='Spinning…';
+    const w=document.getElementById('wheel');
+    w.style.transform='rotate(1440deg)';
+    setTimeout(()=>{
+        document.getElementById('spinner').classList.add('hidden');
+        document.getElementById('win-modal').classList.remove('hidden');
+        confetti();
+    },4200);
+}
+
+function checkout(){
+    document.getElementById('win-modal').classList.add('hidden');
+    document.getElementById('checkout').classList.remove('hidden');
+}
+
+function updTotal(){
+    const b=document.getElementById('bump').checked;
+    document.getElementById('bump-line').classList.toggle('hidden',!b);
+    document.getElementById('total').textContent='$'+(price+(b?14:0)).toFixed(2);
+}
+
+function processPayment(){
+    document.getElementById('checkout').classList.add('hidden');
+    document.getElementById('thanks').classList.remove('hidden');
+    confetti();
+}
+
+function confetti(){
+    const colors=['#a855f7','#ec4899','#f59e0b','#22c55e','#3b82f6'];
+    for(let i=0;i<40;i++){
+        const c=document.createElement('div');
+        c.className='confetti-piece';
+        c.style.left=Math.random()*100+'vw';
+        c.style.background=colors[Math.floor(Math.random()*colors.length)];
+        c.style.animationDelay=Math.random()*2+'s';
+        c.style.animationDuration=(2+Math.random()*2)+'s';
+        c.style.borderRadius=Math.random()>0.5?'50%':'0';
+        document.body.appendChild(c);
+        setTimeout(()=>c.remove(),5000);
+    }
+}
+
+function shareResult(){
+    const t="I just used BabyVibe AI to see what my future baby will look like! 🍼👶 Try it:";
+    if(navigator.share)navigator.share({title:'BabyVibe AI',text:t,url:location.href});
+    else{navigator.clipboard.writeText(t+' '+location.href);alert('Link copied! Share with your partner 🍼');}
+}
+</script>
+</body>
+</html>
