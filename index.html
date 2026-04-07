@@ -481,20 +481,23 @@
             <p class="text-purple-300 text-sm">AI-generated from your photos & personality</p>
         </div>
         
-        <!-- Blurred baby -->
-        <div class="relative mx-auto w-56 h-56 mb-4">
+        <!-- Blurred baby sketch -->
+        <div class="relative mx-auto w-64 h-72 mb-4">
             <div class="w-full h-full rounded-3xl bg-gradient-to-br from-purple-400/20 to-pink-400/20 border-2 border-purple-500/30 flex items-center justify-center pulse-glow overflow-hidden">
                 <div class="text-center blurred" id="baby-img">
-                    <div class="text-7xl">👶</div>
+                    <div class="text-8xl">👶</div>
+                    <p class="text-purple-200 text-xs mt-1">AI-Generated Portrait</p>
                 </div>
-                <div class="absolute inset-0 flex items-center justify-center bg-black/40 rounded-3xl">
+                <div class="absolute inset-0 flex items-center justify-center bg-black/50 rounded-3xl cursor-pointer" onclick="showPaywall()">
                     <div class="text-center">
-                        <div class="text-3xl mb-1">🔒</div>
-                        <p class="text-white font-bold text-sm">Unlock to reveal</p>
+                        <div class="text-4xl mb-2">🔒</div>
+                        <p class="text-white font-bold text-base mb-1">TAP TO REVEAL</p>
+                        <p class="text-purple-300 text-xs">Your baby is ready</p>
                     </div>
                 </div>
             </div>
         </div>
+        <p class="text-center text-purple-400 text-xs mb-3">⚡ <span class="text-white font-bold">847</span> couples generated their baby today</p>
         
         <!-- Partial traits (visible) -->
         <div class="flex justify-center gap-2 mb-4 flex-wrap">
@@ -508,9 +511,17 @@
         </div>
         
         <button onclick="showPaywall()" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-400 hover:to-pink-400 text-white font-extrabold py-4 px-8 rounded-2xl text-lg glow transition-all">
-            Reveal My Baby ✦
+            TAP TO REVEAL ✦
         </button>
         <p class="text-purple-500 text-xs mt-2 text-center">Starting at $1 trial • Cancel anytime</p>
+        <!-- Authority logos -->
+        <div class="flex justify-center items-center gap-4 mt-3 opacity-40">
+            <span class="text-purple-300 text-xs font-bold">Forbes</span>
+            <span class="text-purple-500">•</span>
+            <span class="text-purple-300 text-xs font-bold">Yahoo</span>
+            <span class="text-purple-500">•</span>
+            <span class="text-purple-300 text-xs font-bold">TechCrunch</span>
+        </div>
     </div>
 </div>
 
@@ -594,6 +605,15 @@
             🎰 Spin for $1 Trial!
         </button>
         <p class="text-purple-500 text-xs mt-2 text-center">$1 trial today. After 7 days: $29.99/mo unless canceled.</p>
+
+        <!-- One-time option like Starlo -->
+        <div class="mt-4 pt-4 border-t border-purple-800/20">
+            <p class="text-purple-400 text-xs text-center mb-2">Or get everything forever — no subscription</p>
+            <button onclick="checkout()" class="w-full bg-purple-950/60 border-2 border-purple-600/40 hover:border-purple-500 text-purple-200 font-bold py-3.5 px-8 rounded-2xl text-base transition-all">
+                One-Time Purchase — $37 💎
+            </button>
+            <p class="text-purple-500 text-xs mt-1 text-center">Lifetime access • 30-day guarantee</p>
+        </div>
     </div>
 </div>
 
